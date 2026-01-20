@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madrasa Jamia Aisha Lil Banat</title>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* =========================================
+           MODERN CSS VARIABLES & RESET
+           ========================================= */
+        :root {
+            /* Palette: Professional Teal & Slate Theme */
+            --primary: #0f766e;       /* Teal 700 */
+            --primary-light: #2dd4bf; /* Teal 400 */
+            --primary-dark: #115e59;  /* Teal 800 */
+            --secondary: #334155;    /* Slate 700 */
+            --accent: #f59e0b;        /* Amber 500 */
+            --success: #10b981;       /* Emerald 500 */
+            --danger: #ef4444;        /* Red 500 */
+            --purple: #7c3aed;       /* Violet 600 */
+            
+            --bg-body: #f1f5f9;       /* Slate 100 */
+            --bg-card: #ffffff;
+            --text-main: #1e293b;     /* Slate 800 */
+            --text-muted: #64748b;    /* Slate 500 */
+            
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 40px;
+            scroll-behavior: smooth;
+        }
+
+        /* =========================================
+           LAYOUT & HEADER
+           ========================================= */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul { list-style: none; display: flex; gap: 10px; }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover, nav a.active { background: rgba(255,255,255,0.2); }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* =========================================
+           COMPONENTS
+           ========================================= */
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            border-left: 5px solid var(--primary-light);
+            padding-left: 15px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+            margin-top: 25px;
+        }
+        
+        .card:hover { transform: translateY(-2px); }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            width: 100%; /* Default for mobile */
+        }
+
+        @media (min-width: 768px) {
+            .btn { width: auto; }
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { filter: brightness(1.1); }
+        
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { filter: brightness(1.1); }
+
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-secondary:hover { filter: brightness(1.2); }
+
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; }
+
+        /* Grid Layouts */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+
+        /* Forms */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--secondary); font-size: 0.9rem; }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+        }
+
+        /* Tables */
+        .table-container { overflow-x: auto; background: white; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .table-scroll-container {
+            max-height: 600px; /* Limit height for scrolling full lists */
+            overflow-y: auto;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
+        th { background: var(--secondary); color: white; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
+        tr:hover { background: #f8fafc; }
+        
+        .action-link { color: var(--primary); cursor: pointer; font-weight: 600; }
+        .action-link:hover { text-decoration: underline; }
+
+        .btn-view {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border-radius: 6px;
+        }
+        .btn-view:hover { background-color: #0369a1; color: white; }
+
+        /* =========================================
+           SUB-MENU NAVIGATION
+           ========================================= */
+        .sub-nav-menu {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e2e8f0;
+            scrollbar-width: none; /* Firefox */
+        }
+        .sub-nav-menu::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .sub-nav-item {
+            flex: 0 0 auto;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: white;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sub-nav-item:hover {
+            background: #f8fafc;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .sub-nav-item.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.3);
+        }
+
+        /* Logic for hiding/showing sections */
+        .home-section { display: none; animation: fadeIn 0.4s ease; }
+        .home-section.active { display: block; }
+
+        /* =========================================
+           SPECIFIC SECTIONS
+           ========================================= */
+        /* Stats Cards */
+        .stat-card { text-align: center; color: white; position: relative; overflow: hidden; }
+        .stat-card h3 { font-size: 2.5rem; margin: 10px 0; }
+        .stat-card.students { background: var(--primary); }
+        .stat-card.teachers { background: var(--accent); }
+        .stat-card.donations { background: var(--success); }
+        .stat-card.expenses { background: var(--danger); }
+        .stat-card.net-balance { background: var(--purple); margin-top: 25px;}
+
+        /* Bank Details */
+        .bank-details { background: linear-gradient(to right, #f0fdfa, #fff); border: 1px solid #ccfbf1; }
+        .bank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .bank-item span { display: block; font-size: 0.85rem; color: var(--text-muted); }
+        .bank-item strong { display: block; font-size: 1.1rem; color: var(--primary-dark); margin-top: 4px; }
+
+        /* =========================================
+           UI UTILITIES (Toast, Modal, Loader, BackToTop)
+           ========================================= */
+        /* Toast Notifications */
+        #toast-container { position: fixed; top: 80px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            min-width: 300px;
+            padding: 15px 20px;
+            background: white;
+            border-left: 5px solid;
+            border-radius: 4px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideIn 0.3s ease-out;
+        }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.info { border-color: var(--primary); }
+        
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none; justify-content: center; align-items: center;
+            z-index: 3000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white; padding: 30px; border-radius: var(--radius);
+            width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto;
+            position: relative; animation: popIn 0.3s ease-out;
+        }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+        
+        /* Modal Detail List Styling */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .detail-item { margin-bottom: 10px; }
+        .detail-label { font-weight: bold; color: var(--secondary); font-size: 0.85rem; display: block; }
+        .detail-value { color: var(--text-main); font-size: 1rem; word-break: break-word; }
+        .detail-image { width: 100%; max-width: 200px; border-radius: 8px; margin-top: 5px; border: 1px solid #ddd; }
+
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Loader */
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8); z-index: 5000;
+            display: none; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Back To Top */
+        #backToTop {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+        }
+        #backToTop:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Main View Toggle Logic */
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 10px; text-align: center; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            .section-title { font-size: 1.5rem; }
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notifications -->
+    <div id="toast-container"></div>
+    
+    <!-- Loader -->
+    <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+        <p style="margin-top: 10px; font-weight: 600;">Processing...</p>
+    </div>
+
+    <!-- Back To Top Button -->
+    <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-mosque"></i> Madrasa Jamia Aisha Lil Banat
+            </div>
+            <nav>
+                <ul>
+                    <li><a onclick="switchView('home')" id="nav-home" class="active">Home</a></li>
+                    <li><a onclick="switchView('dashboard')" id="nav-dash"><i class="fas fa-lock"></i> Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- =======================
+             PUBLIC VIEW (HOME)
+             ======================= -->
+        <main id="view-home" class="view-section active">
+            
+            <!-- SUB-NAVIGATION MENU -->
+            <div class="sub-nav-menu">
+                <div class="sub-nav-item active" onclick="switchHomeTab('classes', this)"><i class="fas fa-chalkboard"></i> Classes</div>
+                <div class="sub-nav-item" onclick="switchHomeTab('registrations', this)"><i class="fas fa-user-plus"></i> Registrations</div>
+                <div class="sub-nav-item" onclick="switchHomeTab('finance', this)"><i class="fas fa-hand-holding-heart"></i> Finance</div>
+                <div class="sub-nav-item" onclick="switchHomeTab('contact', this)"><i class="fas fa-phone-alt"></i> Contact</div>
+            </div>
+
+            <!-- TAB 1: CLASSES -->
+            <section id="tab-classes" class="home-section active">
+                <h2 class="section-title"><i class="fas fa-chalkboard"></i> Our Classes</h2>
+                <div class="grid-4" id="classesGrid">
+                    <!-- Generated by JS -->
+                </div>
+            </section>
+
+            <!-- TAB 2: REGISTRATIONS -->
+            <section id="tab-registrations" class="home-section">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="section-title"><i class="fas fa-user-plus"></i> Student Registration</h2>
+                        <div class="card">
+                            <form id="studentForm">
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Mobile *</label><input type="tel" name="mobile" pattern="[0-9]{10}" placeholder="10-digit number" required></div>
+                                    <div class="form-group"><label>Secondary Mobile</label><input type="tel" name="secondaryMobile" pattern="[0-9]{10}"></div>
+                                </div>
+                                <div class="form-group"><label>Email *</label><input type="email" name="email" placeholder="email@example.com" required></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Class *</label><select name="className" id="classSelect" required></select></div>
+                                    <div class="form-group"><label>Gender *</label><select name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+                                </div>
+                                <div class="form-group"><label>Student Name *</label><input type="text" name="fullName" required></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Father's Name *</label><input type="text" name="fatherName" required></div>
+                                    <div class="form-group"><label>Mother's Name *</label><input type="text" name="motherName" required></div>
+                                </div>
+                                <div class="form-group"><label>Guardian's Name *</label><input type="text" name="guardianName" required></div>
+                                <div class="form-group"><label>Address *</label><textarea name="fullAddress" rows="2" required></textarea></div>
+                                <div class="grid-3">
+                                    <div class="form-group"><label>Aadhaar Card (File) *</label><input type="file" name="aadhaarFile" accept="image/*,.pdf" required></div>
+                                    <div class="form-group"><label>Student Photo *</label><input type="file" name="studentPhoto" accept="image/*" required></div>
+                                    <div class="form-group"><label>Guardian Photo *</label><input type="file" name="guardianPhoto" accept="image/*" required></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Register Student</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 class="section-title"><i class="fas fa-chalkboard-teacher"></i> Teacher Registration</h2>
+                        <div class="card">
+                            <form id="teacherForm">
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Mobile *</label><input type="tel" name="mobile" pattern="[0-9]{10}" required></div>
+                                    <div class="form-group"><label>Secondary Mobile</label><input type="tel" name="secondaryMobile" pattern="[0-9]{10}"></div>
+                                </div>
+                                <div class="form-group"><label>Email *</label><input type="email" name="email" required></div>
+                                <div class="form-group"><label>Qualification *</label><input type="text" name="qualification" required></div>
+                                <div class="form-group"><label>Teacher Name *</label><input type="text" name="fullName" required></div>
+                                <div class="form-group"><label>Gender *</label><select name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Father's Name *</label><input type="text" name="fatherName" required></div>
+                                    <div class="form-group"><label>Mother's Name *</label><input type="text" name="motherName" required></div>
+                                </div>
+                                <div class="form-group"><label>Address *</label><textarea name="fullAddress" rows="2" required></textarea></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Aadhaar Card *</label><input type="file" name="aadhaarFile" accept="image/*,.pdf" required></div>
+                                    <div class="form-group"><label>Teacher Photo *</label><input type="file" name="teacherPhoto" accept="image/*" required></div>
+                                </div>
+                                <button type="submit" class="btn btn-accent">Register Teacher</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: FINANCE -->
+            <section id="tab-finance" class="home-section">
+                <div class="grid-2">
+                    <section>
+                        <h2 class="section-title"><i class="fas fa-hand-holding-heart"></i> Donation</h2>
+                        <div class="card bank-details" style="margin-bottom: 20px;">
+                            <h3>Bank & UPI Details</h3>
+                            <div class="bank-grid" style="margin-top:15px">
+                                <div class="bank-item"><span>Bank Name</span><strong>IndusInd Bank</strong></div>
+                                <div class="bank-item"><span>Ac/Name</span><strong>AbdurRahman</strong></div>
+                                <div class="bank-item"><span>Ac/No</span><strong>258825164657</strong></div>
+                                <div class="bank-item"><span>IFSC</span><strong>INDY0001548</strong></div>
+                                <div class="bank-item"><span>UPI ID</span><strong>AbdurRahmanIndusIndCurrent@ybl</strong></div>
+                                <div class="bank-item"><span>UPI Number</span><strong>8825164657</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <form id="donationForm">
+                                <div class="form-group"><label>Donor Name *</label><input type="text" name="fullName" required></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Mode *</label><select name="donationMode" required><option value="">Select</option><option>Cash</option><option>UPI</option><option>Bank Transfer</option></select></div>
+                                    <div class="form-group"><label>Amount (₹) *</label><input type="number" name="amount" min="1" required></div>
+                                </div>
+                                <div class="form-group"><label>Mobile *</label><input type="tel" name="mobile" required></div>
+                                <div class="form-group"><label>Email</label><input type="email" name="email"></div>
+                                <div class="form-group"><label>Transaction ID</label><input type="text" name="transactionId"></div>
+                                <div class="form-group"><label>Upload Receipt (Optional)</label><input type="file" name="paymentScreenshot" accept="image/*"></div>
+                                <button type="submit" class="btn btn-success">Record Donation</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="section-title"><i class="fas fa-file-invoice-dollar"></i> Expense Entry</h2>
+                        <div class="card">
+                            <form id="expenseForm">
+                                <div class="form-group"><label>Item Name *</label><input type="text" name="itemName" required></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Category *</label><select name="itemCategory" required><option value="">Select</option><option>Education</option><option>Infrastructure</option><option>Utilities</option><option>Maintenance</option><option>Events</option><option>Admin</option><option>Other</option></select></div>
+                                    <div class="form-group"><label>Amount (₹) *</label><input type="number" name="itemAmount" min="1" required></div>
+                                </div>
+                                <div class="form-group"><label>Description *</label><textarea name="itemDescription" rows="2" required></textarea></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Date *</label><input type="date" name="expenseDate" required></div>
+                                    <div class="form-group"><label>Entry By *</label><input type="text" name="entryBy" required></div>
+                                </div>
+                                <div class="form-group"><label>Item Photo</label><input type="file" name="itemPhoto" accept="image/*"></div>
+                                <button type="submit" class="btn btn-secondary">Submit Expense</button>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- TAB 4: CONTACT -->
+            <section id="tab-contact" class="home-section">
+                <h2 class="section-title"><i class="fas fa-phone-alt"></i> Contact Us</h2>
+                <div class="card bank-details" style="text-align: center;">
+                    <div class="grid-3">
+                        <div>
+                            <h4>Founder</h4>
+                            <p>Qari Ameerullah</p>
+                            <p>+91 9572456750</p>
+                        </div>
+                        <div>
+                            <h4>Director</h4>
+                            <p>Abdur Rahman</p>
+                            <p>+91 8825164657</p>
+                        </div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>madrasajamiaaishalilbanat@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- =======================
+             ADMIN VIEW (DASHBOARD)
+             ======================= -->
+        <main id="view-dashboard" class="view-section">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                <h2 class="section-title" style="margin:0">Admin Dashboard</h2>
+                <button onclick="loadDashboardData()" class="btn btn-outline"><i class="fas fa-sync"></i> Refresh Data</button>
+            </div>
+
+            <!-- DASHBOARD SUB-NAVIGATION -->
+            <div class="sub-nav-menu">
+                <div class="sub-nav-item active" onclick="switchDashTab('overview', this)"><i class="fas fa-chart-pie"></i> Overview</div>
+                <div class="sub-nav-item" onclick="switchDashTab('students', this)"><i class="fas fa-user-graduate"></i> All Students</div>
+                <div class="sub-nav-item" onclick="switchDashTab('teachers', this)"><i class="fas fa-chalkboard-teacher"></i> All Teachers</div>
+                <div class="sub-nav-item" onclick="switchDashTab('finance', this)"><i class="fas fa-wallet"></i> Finance Log</div>
+            </div>
+
+            <!-- DASH TAB 1: OVERVIEW -->
+            <section id="dash-overview" class="home-section active">
+                <!-- Stats -->
+                <div class="grid-4 mb-20">
+                    <div class="stat-card students card">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                        <h3 id="statStudents">0</h3>
+                        <p>Total Students</p>
+                    </div>
+                    <div class="stat-card teachers card">
+                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                        <h3 id="statTeachers">0</h3>
+                        <p>Total Teachers</p>
+                    </div>
+                    <div class="stat-card donations card">
+                        <i class="fas fa-donate fa-2x"></i>
+                        <h3 id="statDonations">₹0</h3>
+                        <p>Donations</p>
+                    </div>
+                    <div class="stat-card expenses card">
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                        <h3 id="statExpenses">₹0</h3>
+                        <p>Expenses</p>
+                    </div>
+                </div>
+
+                <!-- Net Balance Card -->
+                <div style="margin-bottom: 30px;">
+                    <div class="stat-card net-balance card">
+                        <i class="fas fa-wallet fa-2x"></i>
+                        <h3 id="statNetBalance">₹0</h3>
+                        <p>Net Balance (Donations - Expenses)</p>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid-3 mb-20">
+                    <div class="card"><h4>Donations vs Expenses</h4><canvas id="chart1"></canvas></div>
+                    <div class="card"><h4>Class Distribution</h4><canvas id="chart2"></canvas></div>
+                    <div class="card"><h4>Monthly Trends</h4><canvas id="chart3"></canvas></div>
+                </div>
+            </section>
+
+            <!-- DASH TAB 2: ALL STUDENTS -->
+            <section id="dash-students" class="home-section">
+                <h2 class="section-title">All Students</h2>
+                <div class="card table-scroll-container">
+                    <table id="fullTableStudents">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Gender</th>
+                                <th>Guardian</th>
+                                <th>Mobile</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DASH TAB 3: ALL TEACHERS -->
+            <section id="dash-teachers" class="home-section">
+                <h2 class="section-title">All Teachers</h2>
+                <div class="card table-scroll-container">
+                    <table id="fullTableTeachers">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Qualification</th>
+                                <th>Gender</th>
+                                <th>Mobile</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DASH TAB 4: FINANCE LOG -->
+            <section id="dash-finance" class="home-section">
+                <div class="grid-2">
+                    <div>
+                        <h3 class="section-title" style="font-size: 1.4rem;"><i class="fas fa-hand-holding-heart"></i> Donation History</h3>
+                        <div class="card table-scroll-container" style="max-height: 500px;">
+                            <table id="fullTableDonations">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>Name</th>
+                                        <th>Mode</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="section-title" style="font-size: 1.4rem;"><i class="fas fa-file-invoice-dollar"></i> Expense History</h3>
+                        <div class="card table-scroll-container" style="max-height: 500px;">
+                            <table id="fullTableExpenses">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Modal for Details -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="margin-bottom: 20px; border-bottom: 2px solid var(--primary-light); padding-bottom: 10px;">Details</h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--secondary); color: white; text-align: center; padding: 20px; margin-top: 40px;">
+        <p>&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved.</p>
+    </footer>
+
+    <!-- =========================================
+         JAVASCRIPT LOGIC
+         ========================================= -->
+    <script>
+        // CONFIGURATION
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyRPzNEB5iz0NVfGMcLnfZckDb2mOZ6r80XP90dhOoJTBsRtoYQrZDfcxYJDugTYgp9ug/exec'; 
+        
+        // Global Data Store
+        let GLOBAL_DATA = {
+            students: [],
+            teachers: [],
+            donations: [],
+            expenses: []
+        };
+
+        // --- Navigation & UI ---
+        function switchView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+            
+            if(viewName === 'dashboard') {
+                document.getElementById('view-dashboard').classList.add('active');
+                document.getElementById('nav-dash').classList.add('active');
+                loadDashboardData();
+            } else {
+                document.getElementById('view-home').classList.add('active');
+                document.getElementById('nav-home').classList.add('active');
+            }
+        }
+
+        // Home Tab Switcher
+        function switchHomeTab(tabName, btnElement) {
+            document.querySelectorAll('.sub-nav-menu .sub-nav-item').forEach(el => el.classList.remove('active'));
+            btnElement.classList.add('active');
+            document.querySelectorAll('#view-home .home-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // Dashboard Tab Switcher
+        function switchDashTab(tabName, btnElement) {
+            document.querySelectorAll('#view-dashboard .sub-nav-item').forEach(el => el.classList.remove('active'));
+            btnElement.classList.add('active');
+            document.querySelectorAll('#view-dashboard .home-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('dash-' + tabName).classList.add('active');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function toggleLoader(show) {
+            document.getElementById('loader').style.display = show ? 'flex' : 'none';
+        }
+
+        // Back To Top Logic
+        const backToTopBtn = document.getElementById("backToTop");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = "flex";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        };
+        backToTopBtn.addEventListener('click', function() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        });
+
+        // --- Initialization ---
+        const classes = [
+            "Playgroup (2-3)", "Nursery (3-4)", "LKG (4-5)", "UKG (5-6)", 
+            "Class 1 (6-7)", "Class 2 (7-8)", "Class 3 (8-9)", "Class 4 (9-10)", "Class 5 (10-11)"
+        ];
+
+        window.onload = function() {
+            // Render Class Cards
+            const grid = document.getElementById('classesGrid');
+            const select = document.getElementById('classSelect');
+            
+            classes.forEach(cls => {
+                // Grid Card
+                grid.innerHTML += `<div class="card" style="text-align:center; border-top: 4px solid var(--primary);"><h3>${cls}</h3><p>Admissions Open</p></div>`;
+                // Select Option
+                const opt = document.createElement('option');
+                opt.value = cls.split(' ')[0]; 
+                opt.textContent = cls;
+                select.appendChild(opt);
+            });
+        };
+
+        // --- Data Processing & Fetch ---
+        async function handleFormSubmit(formId, action) {
+            const form = document.getElementById(formId);
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                toggleLoader(true);
+                
+                try {
+                    const formData = new FormData(form);
+                    const data = { action: action };
+                    let filePromise = Promise.resolve();
+
+                    // Process Files
+                    for (let [key, value] of formData.entries()) {
+                        if (value instanceof File) {
+                            if (value.size > 0) {
+                                filePromise = filePromise.then(async () => {
+                                    const base64 = await toBase64(value);
+                                    data[key] = base64;
+                                });
+                            }
+                        } else {
+                            data[key] = value;
+                        }
+                    }
+
+                    await filePromise; 
+
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if(result.success) {
+                        showToast(`Success! ID: ${result.studentId || result.teacherId || result.donationId || result.expenseId}`, 'success');
+                        form.reset();
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    showToast('Error: ' + error.message, 'error');
+                } finally {
+                    toggleLoader(false);
+                }
+            });
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Initialize Forms
+        handleFormSubmit('studentForm', 'registerStudent');
+        handleFormSubmit('teacherForm', 'registerTeacher');
+        handleFormSubmit('donationForm', 'submitDonation');
+        handleFormSubmit('expenseForm', 'submitExpense');
+
+        // --- Dashboard Logic ---
+        let chartInstances = {};
+
+        async function loadDashboardData() {
+            toggleLoader(true);
+            try {
+                const res = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getDashboardData' })
+                });
+                const json = await res.json();
+                
+                if(json.success) {
+                    // Store data globally for modal usage
+                    GLOBAL_DATA = json.data;
+                    renderDashboard(json.data);
+                }
+            } catch (e) {
+                showToast('Failed to load dashboard', 'error');
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        function renderDashboard(data) {
+            // Stats
+            document.getElementById('statStudents').innerText = data.students.length;
+            document.getElementById('statTeachers').innerText = data.teachers.length;
+            document.getElementById('statDonations').innerText = '₹' + data.totalDonations;
+            document.getElementById('statExpenses').innerText = '₹' + data.totalExpenses;
+            
+            // Net Balance Calculation
+            const netBalance = data.totalDonations - data.totalExpenses;
+            const netEl = document.getElementById('statNetBalance');
+            netEl.innerText = '₹' + netBalance;
+            if(netBalance < 0) {
+                netEl.style.color = '#fca5a5'; 
+            } else {
+                netEl.style.color = 'white';
+            }
+
+            // --- RENDER FULL TABLES ---
+            
+            // 1. Students Table
+            const studentRows = data.students.slice().reverse().map(s => `
+                <tr>
+                    <td>${s[0]}</td>
+                    <td>${s[6]}</td>
+                    <td>${s[5]}</td>
+                    <td>${s[7]}</td>
+                    <td>${s[10]}</td>
+                    <td>${s[2]}</td>
+                    <td><button class="btn btn-view" onclick="showStudentDetails('${s[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableStudents tbody').innerHTML = studentRows || '<tr><td colspan="7">No data</td></tr>';
+
+            // 2. Teachers Table
+            const teacherRows = data.teachers.slice().reverse().map(t => `
+                <tr>
+                    <td>${t[0]}</td>
+                    <td>${t[6]}</td>
+                    <td>${t[5]}</td>
+                    <td>${t[7]}</td>
+                    <td>${t[2]}</td>
+                    <td><button class="btn btn-view" onclick="showTeacherDetails('${t[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableTeachers tbody').innerHTML = teacherRows || '<tr><td colspan="6">No data</td></tr>';
+
+            // 3. Donations Table
+            const donRows = data.donations.slice().reverse().map(d => `
+                <tr>
+                    <td>${d[0]}</td>
+                    <td>${new Date(d[1]).toLocaleDateString()}</td>
+                    <td>${d[2]}</td>
+                    <td>${d[3]}</td>
+                    <td>₹${d[4]}</td>
+                    <td><button class="btn btn-view" onclick="showDonationDetails('${d[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableDonations tbody').innerHTML = donRows || '<tr><td colspan="6">No data</td></tr>';
+
+            // 4. Expenses Table
+            const expRows = data.expenses.slice().reverse().map(e => `
+                <tr>
+                    <td>${e[0]}</td>
+                    <td>${new Date(e[1]).toLocaleDateString()}</td>
+                    <td>${e[2]}</td>
+                    <td>${e[3]}</td>
+                    <td>₹${e[6]}</td>
+                    <td><button class="btn btn-view" onclick="showExpenseDetails('${e[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableExpenses tbody').innerHTML = expRows || '<tr><td colspan="6">No data</td></tr>';
+
+            // Charts
+            renderChart1(data.totalDonations, data.totalExpenses);
+            renderChart2(data.students);
+            renderChart3(data.donations, data.expenses);
+        }
+
+        // --- Chart Renders ---
+        function renderChart1(don, exp) {
+            const ctx = document.getElementById('chart1').getContext('2d');
+            if(chartInstances.c1) chartInstances.c1.destroy();
+            chartInstances.c1 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Donations', 'Expenses'],
+                    datasets: [{ label: 'Amount', data: [don, exp], backgroundColor: ['#10b981', '#ef4444'] }]
+                },
+                options: { responsive: true }
+            });
+        }
+
+        function renderChart2(students) {
+            const ctx = document.getElementById('chart2').getContext('2d');
+            if(chartInstances.c2) chartInstances.c2.destroy();
+            
+            // Count classes
+            const counts = {};
+            students.forEach(s => {
+                const cls = s[5] || 'Unknown';
+                counts[cls] = (counts[cls] || 0) + 1;
+            });
+
+            chartInstances.c2 = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(counts),
+                    datasets: [{ data: Object.values(counts), backgroundColor: ['#0f766e', '#2dd4bf', '#334155', '#f59e0b', '#64748b'] }]
+                }
+            });
+        }
+
+        function renderChart3(donations, expenses) {
+            const ctx = document.getElementById('chart3').getContext('2d');
+            if(chartInstances.c3) chartInstances.c3.destroy();
+            // Simplified logic for demo trends
+            chartInstances.c3 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [
+                        { label: 'Income', data: [10, 20, 15, 25, 30], borderColor: '#10b981', tension: 0.4 },
+                        { label: 'Expense', data: [5, 10, 8, 12, 15], borderColor: '#ef4444', tension: 0.4 }
+                    ]
+                }
+            });
+        }
+
+        // --- View Details Modal Functions ---
+        
+        function openModal(title, contentHTML) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = contentHTML;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target == modal) closeModal();
+        }
+
+        // Helper to find object by ID in GLOBAL_DATA
+        function findData(type, id) {
+            return GLOBAL_DATA[type].find(row => row[0] === id);
+        }
+
+        // 1. Student Details
+        function showStudentDetails(id) {
+            const s = findData('students', id);
+            if(!s) return;
+            
+            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Class(5), Name(6), Gender(7), Father(8), Mother(9), Guardian(10), Address(11), Aadhaar(12), Photo(13), GPhoto(14)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Student ID</span><span class="detail-value">${s[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value">${s[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Class</span><span class="detail-value">${s[5]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${s[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${s[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${s[4]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Father's Name</span><span class="detail-value">${s[8]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mother's Name</span><span class="detail-value">${s[9]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Guardian</span><span class="detail-value">${s[10]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Secondary Mobile</span><span class="detail-value">${s[3] || '-'}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Address</span><span class="detail-value">${s[11]}</span></div>
+                </div>
+                <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+                    <h4 style="margin-bottom:10px;">Documents</h4>
+                    <div class="grid-3">
+                        <div>
+                            <span class="detail-label">Student Photo</span>
+                            ${s[13] ? `<a href="${s[13]}" target="_blank"><img src="${s[13]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                        </div>
+                        <div>
+                            <span class="detail-label">Guardian Photo</span>
+                            ${s[14] ? `<a href="${s[14]}" target="_blank"><img src="${s[14]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                        </div>
+                        <div>
+                            <span class="detail-label">Aadhaar Card</span>
+                            ${s[12] ? `<a href="${s[12]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View File</a>` : '<p>No File</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('Student Details', html);
+        }
+
+        // 2. Teacher Details
+        function showTeacherDetails(id) {
+            const t = findData('teachers', id);
+            if(!t) return;
+
+            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Teacher ID</span><span class="detail-value">${t[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value">${t[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Qualification</span><span class="detail-value">${t[5]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${t[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${t[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${t[4]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Father's Name</span><span class="detail-value">${t[8]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mother's Name</span><span class="detail-value">${t[9]}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Address</span><span class="detail-value">${t[10]}</span></div>
+                </div>
+                <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+                    <div class="grid-2">
+                        <div>
+                            <span class="detail-label">Teacher Photo</span>
+                            ${t[12] ? `<a href="${t[12]}" target="_blank"><img src="${t[12]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                        </div>
+                        <div>
+                            <span class="detail-label">Aadhaar Card</span>
+                            ${t[11] ? `<a href="${t[11]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View File</a>` : '<p>No File</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('Teacher Details', html);
+        }
+
+        // 3. Donation Details
+        function showDonationDetails(id) {
+            const d = findData('donations', id);
+            if(!d) return;
+
+            // Indices: ID(0), Date(1), Name(2), Mode(3), Amount(4), Mobile(5), Email(6), TxnID(7), Screenshot(8)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Donation ID</span><span class="detail-value">${d[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Donor Name</span><span class="detail-value">${d[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Amount</span><span class="detail-value">₹${d[4]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mode</span><span class="detail-value">${d[3]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Date</span><span class="detail-value">${new Date(d[1]).toLocaleString()}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${d[5]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${d[6] || '-'}</span></div>
+                    <div class="detail-item"><span class="detail-label">Transaction ID</span><span class="detail-value">${d[7] || '-'}</span></div>
+                </div>
+                <div style="margin-top:20px;">
+                    <span class="detail-label">Payment Receipt</span>
+                    ${d[8] ? `<a href="${d[8]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View Receipt</a>` : '<p>No Receipt</p>'}
+                </div>
+            `;
+            openModal('Donation Details', html);
+        }
+
+        // 4. Expense Details
+        function showExpenseDetails(id) {
+            const e = findData('expenses', id);
+            if(!e) return;
+
+            // Indices: ID(0), Timestamp(1), Item(2), Category(3), Desc(4), Photo(5), Amount(6), ExpDate(7), EntryBy(8)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Expense ID</span><span class="detail-value">${e[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Item Name</span><span class="detail-value">${e[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Category</span><span class="detail-value">${e[3]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Amount</span><span class="detail-value">₹${e[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Expense Date</span><span class="detail-value">${e[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Entry By</span><span class="detail-value">${e[8]}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Description</span><span class="detail-value">${e[4]}</span></div>
+                </div>
+                <div style="margin-top:20px;">
+                    <span class="detail-label">Item Photo/Proof</span>
+                    ${e[5] ? `<a href="${e[5]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View Image</a>` : '<p>No Image</p>'}
+                </div>
+            `;
+            openModal('Expense Details', html);
+        }
+
+    </script>
+</body>
+</html>
+
+
+
+/* =========================================
+   BACKEND CODE (Code.gs)
+   ========================================= */
+
+const ROOT_FOLDER_NAME = "Madrasa_Aisha_Files";
+
+// Define Subfolder Structure
+const FOLDERS = {
+  AADHAAR: "01_Aadhaar_Cards",
+  STUDENT_PHOTOS: "02_Student_Photos",
+  GUARDIAN_PHOTOS: "03_Guardian_Photos",
+  TEACHER_PHOTOS: "04_Teacher_Photos",
+  DONATION_RECEIPTS: "05_Donation_Receipts",
+  EXPENSE_IMAGES: "06_Expense_Images"
+};
+
+const SHEETS = {
+  STUDENTS: "Students",
+  TEACHERS: "Teachers",
+  DONATIONS: "Donations",
+  EXPENSES: "Expenses"
+};
+
+/**
+ * Handles incoming HTTP POST requests
+ */
+function doPost(e) {
+  // 1. Initialize System (Create Folders/Sheets if missing)
+  const structure = initSystem();
+
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000); 
+    
+    if (!e.postData.contents) {
+      return response({ success: false, message: "No data received" });
+    }
+
+    const data = JSON.parse(e.postData.contents);
+    const action = data.action;
+
+    let result = {};
+    
+    // 2. Router
+    switch(action) {
+      case "registerStudent":
+        result = registerStudent(data, structure);
+        break;
+      case "registerTeacher":
+        result = registerTeacher(data, structure);
+        break;
+      case "submitDonation":
+        result = submitDonation(data, structure);
+        break;
+      case "submitExpense":
+        result = submitExpense(data, structure);
+        break;
+      case "getDashboardData":
+        result = getDashboardData();
+        break;
+      default:
+        result = { success: false, message: "Invalid Action" };
+    }
+
+    return response(result);
+
+  } catch (err) {
+    return response({ success: false, message: err.toString() });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Standard JSON Response Helper
+ */
+function response(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* =========================================
+   INITIALIZATION & HELPERS
+   ========================================= */
+
+function initSystem() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Ensure Main Folder Exists
+  const rootFolder = getOrCreateRootFolder();
+
+  // Ensure Subfolders Exist & Store References
+  const folderStructure = {};
+  Object.keys(FOLDERS).forEach(key => {
+    folderStructure[key] = getOrCreateSubFolder(rootFolder, FOLDERS[key]);
+  });
+
+  // Ensure Sheets Exist
+  Object.keys(SHEETS).forEach(key => {
+    const sheetName = SHEETS[key];
+    if (!ss.getSheetByName(sheetName)) {
+      const sheet = ss.insertSheet(sheetName);
+      // Add Headers based on sheet type
+      let headers = [];
+      if (key === 'STUDENTS') {
+        headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Class", "Name", "Gender", "Father", "Mother", "Guardian", "Address", "AadhaarURL", "PhotoURL", "GuardianPhotoURL"];
+      } else if (key === 'TEACHERS') {
+        headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Qual", "Name", "Gender", "Father", "Mother", "Address", "AadhaarURL", "PhotoURL"];
+      } else if (key === 'DONATIONS') {
+        headers = ["ID", "Date", "Name", "Mode", "Amount", "Mobile", "Email", "TxnID", "ScreenshotURL"];
+      } else if (key === 'EXPENSES') {
+        headers = ["ID", "Timestamp", "Item", "Category", "Desc", "PhotoURL", "Amount", "ExpDate", "EntryBy"];
+      }
+      
+      if (headers.length > 0) {
+        sheet.appendRow(headers);
+        // Style Header
+        const range = sheet.getRange(1, 1, 1, headers.length);
+        range.setBackground("#0f766e").setFontColor("white").setFontWeight("bold");
+        sheet.setFrozenRows(1);
+      }
+    }
+  });
+
+  return folderStructure;
+}
+
+function getOrCreateRootFolder() {
+  const folders = DriveApp.getFoldersByName(ROOT_FOLDER_NAME);
+  if (folders.hasNext()) return folders.next();
+  
+  // Create if not exists
+  const folder = DriveApp.createFolder(ROOT_FOLDER_NAME);
+  folder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return folder;
+}
+
+function getOrCreateSubFolder(parentFolder, folderName) {
+  const folders = parentFolder.getFoldersByName(folderName);
+  if (folders.hasNext()) return folders.next();
+  return parentFolder.createFolder(folderName);
+}
+
+function uploadFile(base64Data, fileName, targetFolder) {
+  try {
+    const split = base64Data.split('base64,');
+    const type = split[0].split(':')[1].split(';')[0];
+    const blob = Utilities.newBlob(Utilities.base64Decode(split[1]), type, fileName);
+    const file = targetFolder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return file.getUrl();
+  } catch (e) {
+    return "Error uploading file"; // Fallback to not crash the whole submission
+  }
+}
+
+/* =========================================
+   LOGIC FUNCTIONS
+   ========================================= */
+
+function registerStudent(data, folders) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEETS.STUDENTS);
+  const id = "STU-" + Utilities.getUuid().substring(0,6).toUpperCase();
+  
+  // Route to specific folders
+  const aadhaar = data.aadhaarFile ? uploadFile(data.aadhaarFile, `Aadhaar_${id}.jpg`, folders.AADHAAR) : "";
+  const photo = data.studentPhoto ? uploadFile(data.studentPhoto, `Photo_${id}.jpg`, folders.STUDENT_PHOTOS) : "";
+  const gPhoto = data.guardianPhoto ? uploadFile(data.guardianPhoto, `GPhoto_${id}.jpg`, folders.GUARDIAN_PHOTOS) : "";
+
+  ss.appendRow([
+    id, new Date(), data.mobile, data.secondaryMobile, data.email, 
+    data.className, data.fullName, data.gender, data.fatherName, 
+    data.motherName, data.guardianName, data.fullAddress, 
+    aadhaar, photo, gPhoto
+  ]);
+  
+  return { success: true, message: "Student Registered", studentId: id };
+}
+
+function registerTeacher(data, folders) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEETS.TEACHERS);
+  const id = "TCH-" + Utilities.getUuid().substring(0,6).toUpperCase();
+  
+  // Route to specific folders
+  const aadhaar = data.aadhaarFile ? uploadFile(data.aadhaarFile, `Aadhaar_${id}.jpg`, folders.AADHAAR) : "";
+  const photo = data.teacherPhoto ? uploadFile(data.teacherPhoto, `Photo_${id}.jpg`, folders.TEACHER_PHOTOS) : "";
+
+  ss.appendRow([
+    id, new Date(), data.mobile, data.secondaryMobile, data.email, 
+    data.qualification, data.fullName, data.gender, data.fatherName, 
+    data.motherName, data.fullAddress, aadhaar, photo
+  ]);
+  
+  return { success: true, message: "Teacher Registered", teacherId: id };
+}
+
+function submitDonation(data, folders) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEETS.DONATIONS);
+  const id = "DON-" + Utilities.getUuid().substring(0,6).toUpperCase();
+  
+  // Route to Donation Receipts Folder
+  const screenshot = data.paymentScreenshot ? uploadFile(data.paymentScreenshot, `Pay_${id}.jpg`, folders.DONATION_RECEIPTS) : "";
+  
+  ss.appendRow([
+    id, new Date(), data.fullName, data.donationMode, data.amount, 
+    data.mobile, data.email, data.transactionId, screenshot
+  ]);
+  
+  return { success: true, message: "Donation Recorded", donationId: id };
+}
+
+function submitExpense(data, folders) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEETS.EXPENSES);
+  const id = "EXP-" + Utilities.getUuid().substring(0,6).toUpperCase();
+  
+  // Route to Expense Images Folder
+  const photo = data.itemPhoto ? uploadFile(data.itemPhoto, `Exp_${id}.jpg`, folders.EXPENSE_IMAGES) : "";
+  
+  ss.appendRow([
+    id, new Date(), data.itemName, data.itemCategory, data.itemDescription, 
+    photo, data.itemAmount, data.expenseDate, data.entryBy
+  ]);
+  
+  return { success: true, message: "Expense Logged", expenseId: id };
+}
+
+function getDashboardData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Helper to get all rows excluding header
+  const getRows = (name) => {
+    const sheet = ss.getSheetByName(name);
+    if (sheet.getLastRow() <= 1) return [];
+    return sheet.getRange(2, 1, sheet.getLastRow()-1, sheet.getLastColumn()).getValues();
+  };
+  
+  const students = getRows(SHEETS.STUDENTS);
+  const teachers = getRows(SHEETS.TEACHERS);
+  const donations = getRows(SHEETS.DONATIONS);
+  const expenses = getRows(SHEETS.EXPENSES);
+  
+  // Calculations
+  const totalDonations = donations.reduce((sum, row) => sum + Number(row[4] || 0), 0);
+  const totalExpenses = expenses.reduce((sum, row) => sum + Number(row[6] || 0), 0);
+
+  return {
+    success: true,
+    data: {
+      totalStudents: students.length,
+      totalTeachers: teachers.length,
+      totalDonations: totalDonations,
+      totalExpenses: totalExpenses,
+      students, 
+      teachers, 
+      donations, 
+      expenses
+    }
+  };
+}

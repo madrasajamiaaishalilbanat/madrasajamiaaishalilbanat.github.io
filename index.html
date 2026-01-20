@@ -41,6 +41,7 @@
             color: var(--text-main);
             line-height: 1.6;
             padding-bottom: 40px;
+            scroll-behavior: smooth;
         }
 
         /* =========================================
@@ -110,6 +111,7 @@
             padding: 1.5rem;
             box-shadow: var(--shadow);
             transition: transform 0.2s;
+            margin-top: 25px;
         }
         
         .card:hover { transform: translateY(-2px); }
@@ -173,16 +175,29 @@
 
         /* Tables */
         .table-container { overflow-x: auto; background: white; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .table-scroll-container {
+            max-height: 600px; /* Limit height for scrolling full lists */
+            overflow-y: auto;
+        }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-        th { background: var(--secondary); color: white; white-space: nowrap; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
+        th { background: var(--secondary); color: white; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
         tr:hover { background: #f8fafc; }
         
         .action-link { color: var(--primary); cursor: pointer; font-weight: 600; }
         .action-link:hover { text-decoration: underline; }
 
+        .btn-view {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border-radius: 6px;
+        }
+        .btn-view:hover { background-color: #0369a1; color: white; }
+
         /* =========================================
-           NEW: SUB-MENU NAVIGATION
+           SUB-MENU NAVIGATION
            ========================================= */
         .sub-nav-menu {
             display: flex;
@@ -223,7 +238,7 @@
             box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.3);
         }
 
-        /* Logic for hiding/showing sub-sections */
+        /* Logic for hiding/showing sections */
         .home-section { display: none; animation: fadeIn 0.4s ease; }
         .home-section.active { display: block; }
 
@@ -246,7 +261,7 @@
         .bank-item strong { display: block; font-size: 1.1rem; color: var(--primary-dark); margin-top: 4px; }
 
         /* =========================================
-           UI UTILITIES (Toast, Modal, Loader)
+           UI UTILITIES (Toast, Modal, Loader, BackToTop)
            ========================================= */
         /* Toast Notifications */
         #toast-container { position: fixed; top: 80px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
@@ -278,10 +293,23 @@
         }
         .modal-content {
             background: white; padding: 30px; border-radius: var(--radius);
-            width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto;
+            width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto;
             position: relative; animation: popIn 0.3s ease-out;
         }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+        
+        /* Modal Detail List Styling */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .detail-item { margin-bottom: 10px; }
+        .detail-label { font-weight: bold; color: var(--secondary); font-size: 0.85rem; display: block; }
+        .detail-value { color: var(--text-main); font-size: 1rem; word-break: break-word; }
+        .detail-image { width: 100%; max-width: 200px; border-radius: 8px; margin-top: 5px; border: 1px solid #ddd; }
+
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* Loader */
@@ -293,6 +321,33 @@
         .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
+        /* Back To Top */
+        #backToTop {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+        }
+        #backToTop:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
         /* Main View Toggle Logic */
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
@@ -303,6 +358,7 @@
             .header-content { flex-direction: column; gap: 10px; text-align: center; }
             nav ul { flex-wrap: wrap; justify-content: center; }
             .section-title { font-size: 1.5rem; }
+            .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -316,6 +372,9 @@
         <div class="spinner"></div>
         <p style="margin-top: 10px; font-weight: 600;">Processing...</p>
     </div>
+
+    <!-- Back To Top Button -->
+    <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
     <!-- Header -->
     <header>
@@ -339,7 +398,7 @@
              ======================= -->
         <main id="view-home" class="view-section active">
             
-            <!-- NEW: SUB-NAVIGATION MENU -->
+            <!-- SUB-NAVIGATION MENU -->
             <div class="sub-nav-menu">
                 <div class="sub-nav-item active" onclick="switchHomeTab('classes', this)"><i class="fas fa-chalkboard"></i> Classes</div>
                 <div class="sub-nav-item" onclick="switchHomeTab('registrations', this)"><i class="fas fa-user-plus"></i> Registrations</div>
@@ -498,66 +557,146 @@
              ADMIN VIEW (DASHBOARD)
              ======================= -->
         <main id="view-dashboard" class="view-section">
+            
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
                 <h2 class="section-title" style="margin:0">Admin Dashboard</h2>
                 <button onclick="loadDashboardData()" class="btn btn-outline"><i class="fas fa-sync"></i> Refresh Data</button>
             </div>
 
-            <!-- Stats -->
-            <div class="grid-4 mb-20">
-                <div class="stat-card students card">
-                    <i class="fas fa-user-graduate fa-2x"></i>
-                    <h3 id="statStudents">0</h3>
-                    <p>Total Students</p>
-                </div>
-                <div class="stat-card teachers card">
-                    <i class="fas fa-chalkboard-teacher fa-2x"></i>
-                    <h3 id="statTeachers">0</h3>
-                    <p>Total Teachers</p>
-                </div>
-                <div class="stat-card donations card">
-                    <i class="fas fa-donate fa-2x"></i>
-                    <h3 id="statDonations">₹0</h3>
-                    <p>Donations</p>
-                </div>
-                <div class="stat-card expenses card">
-                    <i class="fas fa-money-bill-wave fa-2x"></i>
-                    <h3 id="statExpenses">₹0</h3>
-                    <p>Expenses</p>
-                </div>
+            <!-- DASHBOARD SUB-NAVIGATION -->
+            <div class="sub-nav-menu">
+                <div class="sub-nav-item active" onclick="switchDashTab('overview', this)"><i class="fas fa-chart-pie"></i> Overview</div>
+                <div class="sub-nav-item" onclick="switchDashTab('students', this)"><i class="fas fa-user-graduate"></i> All Students</div>
+                <div class="sub-nav-item" onclick="switchDashTab('teachers', this)"><i class="fas fa-chalkboard-teacher"></i> All Teachers</div>
+                <div class="sub-nav-item" onclick="switchDashTab('finance', this)"><i class="fas fa-wallet"></i> Finance Log</div>
             </div>
 
-            <!-- NEW: Net Balance Card -->
-            <div style="margin-bottom: 30px;">
-                <div class="stat-card net-balance card">
-                    <i class="fas fa-wallet fa-2x"></i>
-                    <h3 id="statNetBalance">₹0</h3>
-                    <p>Net Balance (Donations - Expenses)</p>
-                </div>
-            </div>
-
-            <!-- Charts -->
-            <div class="grid-3 mb-20">
-                <div class="card"><h4>Donations vs Expenses</h4><canvas id="chart1"></canvas></div>
-                <div class="card"><h4>Class Distribution</h4><canvas id="chart2"></canvas></div>
-                <div class="card"><h4>Monthly Trends</h4><canvas id="chart3"></canvas></div>
-            </div>
-
-            <!-- Tables -->
-            <div class="grid-2">
-                <div class="card">
-                    <h3><i class="fas fa-users"></i> Recent Students</h3>
-                    <div class="table-container" style="max-height: 400px; overflow-y:auto; margin-top:10px;">
-                        <table id="tableStudents"><thead><tr><th>ID</th><th>Name</th><th>Class</th></tr></thead><tbody></tbody></table>
+            <!-- DASH TAB 1: OVERVIEW -->
+            <section id="dash-overview" class="home-section active">
+                <!-- Stats -->
+                <div class="grid-4 mb-20">
+                    <div class="stat-card students card">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                        <h3 id="statStudents">0</h3>
+                        <p>Total Students</p>
+                    </div>
+                    <div class="stat-card teachers card">
+                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                        <h3 id="statTeachers">0</h3>
+                        <p>Total Teachers</p>
+                    </div>
+                    <div class="stat-card donations card">
+                        <i class="fas fa-donate fa-2x"></i>
+                        <h3 id="statDonations">₹0</h3>
+                        <p>Donations</p>
+                    </div>
+                    <div class="stat-card expenses card">
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                        <h3 id="statExpenses">₹0</h3>
+                        <p>Expenses</p>
                     </div>
                 </div>
-                <div class="card">
-                    <h3><i class="fas fa-rupee-sign"></i> Recent Donations</h3>
-                    <div class="table-container" style="max-height: 400px; overflow-y:auto; margin-top:10px;">
-                        <table id="tableDonations"><thead><tr><th>ID</th><th>Name</th><th>Amount</th></tr></thead><tbody></tbody></table>
+
+                <!-- Net Balance Card -->
+                <div style="margin-bottom: 30px;">
+                    <div class="stat-card net-balance card">
+                        <i class="fas fa-wallet fa-2x"></i>
+                        <h3 id="statNetBalance">₹0</h3>
+                        <p>Net Balance (Donations - Expenses)</p>
                     </div>
                 </div>
-            </div>
+
+                <!-- Charts -->
+                <div class="grid-3 mb-20">
+                    <div class="card"><h4>Donations vs Expenses</h4><canvas id="chart1"></canvas></div>
+                    <div class="card"><h4>Class Distribution</h4><canvas id="chart2"></canvas></div>
+                    <div class="card"><h4>Monthly Trends</h4><canvas id="chart3"></canvas></div>
+                </div>
+            </section>
+
+            <!-- DASH TAB 2: ALL STUDENTS -->
+            <section id="dash-students" class="home-section">
+                <h2 class="section-title">All Students</h2>
+                <div class="card table-scroll-container">
+                    <table id="fullTableStudents">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Gender</th>
+                                <th>Guardian</th>
+                                <th>Mobile</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DASH TAB 3: ALL TEACHERS -->
+            <section id="dash-teachers" class="home-section">
+                <h2 class="section-title">All Teachers</h2>
+                <div class="card table-scroll-container">
+                    <table id="fullTableTeachers">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Qualification</th>
+                                <th>Gender</th>
+                                <th>Mobile</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DASH TAB 4: FINANCE LOG -->
+            <section id="dash-finance" class="home-section">
+                <div class="grid-2">
+                    <div>
+                        <h3 class="section-title" style="font-size: 1.4rem;"><i class="fas fa-hand-holding-heart"></i> Donation History</h3>
+                        <div class="card table-scroll-container" style="max-height: 500px;">
+                            <table id="fullTableDonations">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>Name</th>
+                                        <th>Mode</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="section-title" style="font-size: 1.4rem;"><i class="fas fa-file-invoice-dollar"></i> Expense History</h3>
+                        <div class="card table-scroll-container" style="max-height: 500px;">
+                            <table id="fullTableExpenses">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
 
     </div>
@@ -566,14 +705,14 @@
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle" style="margin-bottom: 20px;">Details</h2>
+            <h2 id="modalTitle" style="margin-bottom: 20px; border-bottom: 2px solid var(--primary-light); padding-bottom: 10px;">Details</h2>
             <div id="modalBody"></div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer style="background: var(--secondary); color: white; text-align: center; padding: 20px; margin-top: 40px;">
-        <p>&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved.</p>
+        <p>&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved. <br> Designed and Developed By <a href="https://www.techilyfly.com" target="_blank">Techily Fly by AbdurRahman Ibn Ghufran!</a> </p>
     </footer>
 
     <!-- =========================================
@@ -581,8 +720,16 @@
          ========================================= -->
     <script>
         // CONFIGURATION
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyn8vjjg5OF9tvu4JV_YxMxS8FOJ6osiPRy3fMNDWUXBkvYsYWo3tEmHG4cO2zbegsE4Q/exec'; 
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyRPzNEB5iz0NVfGMcLnfZckDb2mOZ6r80XP90dhOoJTBsRtoYQrZDfcxYJDugTYgp9ug/exec'; 
         
+        // Global Data Store
+        let GLOBAL_DATA = {
+            students: [],
+            teachers: [],
+            donations: [],
+            expenses: []
+        };
+
         // --- Navigation & UI ---
         function switchView(viewName) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -598,17 +745,20 @@
             }
         }
 
-        // NEW: Home Tab Switcher
+        // Home Tab Switcher
         function switchHomeTab(tabName, btnElement) {
-            // Remove active class from all buttons
-            document.querySelectorAll('.sub-nav-item').forEach(el => el.classList.remove('active'));
-            // Add active class to clicked button
+            document.querySelectorAll('.sub-nav-menu .sub-nav-item').forEach(el => el.classList.remove('active'));
             btnElement.classList.add('active');
-
-            // Hide all sections
-            document.querySelectorAll('.home-section').forEach(el => el.classList.remove('active'));
-            // Show target section
+            document.querySelectorAll('#view-home .home-section').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // Dashboard Tab Switcher
+        function switchDashTab(tabName, btnElement) {
+            document.querySelectorAll('#view-dashboard .sub-nav-item').forEach(el => el.classList.remove('active'));
+            btnElement.classList.add('active');
+            document.querySelectorAll('#view-dashboard .home-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('dash-' + tabName).classList.add('active');
         }
 
         function showToast(message, type = 'info') {
@@ -627,6 +777,20 @@
             document.getElementById('loader').style.display = show ? 'flex' : 'none';
         }
 
+        // Back To Top Logic
+        const backToTopBtn = document.getElementById("backToTop");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = "flex";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        };
+        backToTopBtn.addEventListener('click', function() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        });
+
         // --- Initialization ---
         const classes = [
             "Playgroup (2-3)", "Nursery (3-4)", "LKG (4-5)", "UKG (5-6)", 
@@ -643,15 +807,10 @@
                 grid.innerHTML += `<div class="card" style="text-align:center; border-top: 4px solid var(--primary);"><h3>${cls}</h3><p>Admissions Open</p></div>`;
                 // Select Option
                 const opt = document.createElement('option');
-                opt.value = cls.split(' ')[0]; // simple value
+                opt.value = cls.split(' ')[0]; 
                 opt.textContent = cls;
                 select.appendChild(opt);
             });
-
-            // Check Config
-            if(APPS_SCRIPT_URL.includes('YOUR_DEPLOYED')) {
-                showToast('Please configure APPS_SCRIPT_URL in the code!', 'error');
-            }
         };
 
         // --- Data Processing & Fetch ---
@@ -680,7 +839,7 @@
                         }
                     }
 
-                    await filePromise; // Wait for file conversion
+                    await filePromise; 
 
                     const response = await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
@@ -731,6 +890,8 @@
                 const json = await res.json();
                 
                 if(json.success) {
+                    // Store data globally for modal usage
+                    GLOBAL_DATA = json.data;
                     renderDashboard(json.data);
                 }
             } catch (e) {
@@ -751,19 +912,62 @@
             const netBalance = data.totalDonations - data.totalExpenses;
             const netEl = document.getElementById('statNetBalance');
             netEl.innerText = '₹' + netBalance;
-            // Visual cue for negative balance
             if(netBalance < 0) {
-                netEl.style.color = '#fca5a5'; // Light red text
+                netEl.style.color = '#fca5a5'; 
             } else {
                 netEl.style.color = 'white';
             }
 
-            // Tables (Just showing recent ones)
-            const studentRows = data.students.slice(-5).reverse().map(s => `<tr><td><span class="action-link">${s[0]}</span></td><td>${s[6]}</td><td>${s[5]}</td></tr>`).join('');
-            document.querySelector('#tableStudents tbody').innerHTML = studentRows || '<tr><td colspan="3">No data</td></tr>';
+            // --- RENDER FULL TABLES ---
+            
+            // 1. Students Table
+            const studentRows = data.students.slice().reverse().map(s => `
+                <tr>
+                    <td>${s[0]}</td>
+                    <td>${s[6]}</td>
+                    <td>${s[5]}</td>
+                    <td>${s[7]}</td>
+                    <td>${s[10]}</td>
+                    <td>${s[2]}</td>
+                    <td><button class="btn btn-view" onclick="showStudentDetails('${s[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableStudents tbody').innerHTML = studentRows || '<tr><td colspan="7">No data</td></tr>';
 
-            const donRows = data.donations.slice(-5).reverse().map(d => `<tr><td><span class="action-link">${d[0]}</span></td><td>${d[2]}</td><td>₹${d[4]}</td></tr>`).join('');
-            document.querySelector('#tableDonations tbody').innerHTML = donRows || '<tr><td colspan="3">No data</td></tr>';
+            // 2. Teachers Table
+            const teacherRows = data.teachers.slice().reverse().map(t => `
+                <tr>
+                    <td>${t[0]}</td>
+                    <td>${t[6]}</td>
+                    <td>${t[5]}</td>
+                    <td>${t[7]}</td>
+                    <td>${t[2]}</td>
+                    <td><button class="btn btn-view" onclick="showTeacherDetails('${t[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableTeachers tbody').innerHTML = teacherRows || '<tr><td colspan="6">No data</td></tr>';
+
+            // 3. Donations Table
+            const donRows = data.donations.slice().reverse().map(d => `
+                <tr>
+                    <td>${d[0]}</td>
+                    <td>${new Date(d[1]).toLocaleDateString()}</td>
+                    <td>${d[2]}</td>
+                    <td>${d[3]}</td>
+                    <td>₹${d[4]}</td>
+                    <td><button class="btn btn-view" onclick="showDonationDetails('${d[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableDonations tbody').innerHTML = donRows || '<tr><td colspan="6">No data</td></tr>';
+
+            // 4. Expenses Table
+            const expRows = data.expenses.slice().reverse().map(e => `
+                <tr>
+                    <td>${e[0]}</td>
+                    <td>${new Date(e[1]).toLocaleDateString()}</td>
+                    <td>${e[2]}</td>
+                    <td>${e[3]}</td>
+                    <td>₹${e[6]}</td>
+                    <td><button class="btn btn-view" onclick="showExpenseDetails('${e[0]}')">View</button></td>
+                </tr>`).join('');
+            document.querySelector('#fullTableExpenses tbody').innerHTML = expRows || '<tr><td colspan="6">No data</td></tr>';
 
             // Charts
             renderChart1(data.totalDonations, data.totalExpenses);
@@ -771,6 +975,7 @@
             renderChart3(data.donations, data.expenses);
         }
 
+        // --- Chart Renders ---
         function renderChart1(don, exp) {
             const ctx = document.getElementById('chart1').getContext('2d');
             if(chartInstances.c1) chartInstances.c1.destroy();
@@ -807,7 +1012,7 @@
         function renderChart3(donations, expenses) {
             const ctx = document.getElementById('chart3').getContext('2d');
             if(chartInstances.c3) chartInstances.c3.destroy();
-            // Simplified logic: Just show last 5 items for demo
+            // Simplified logic for demo trends
             chartInstances.c3 = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -820,19 +1025,150 @@
             });
         }
 
-        // --- Modal Logic ---
+        // --- View Details Modal Functions ---
+        
         function openModal(title, contentHTML) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalBody').innerHTML = contentHTML;
             document.getElementById('detailModal').style.display = 'flex';
         }
+
         function closeModal() {
             document.getElementById('detailModal').style.display = 'none';
         }
-        // Close on click outside
+        
         window.onclick = function(event) {
             const modal = document.getElementById('detailModal');
             if (event.target == modal) closeModal();
+        }
+
+        // Helper to find object by ID in GLOBAL_DATA
+        function findData(type, id) {
+            return GLOBAL_DATA[type].find(row => row[0] === id);
+        }
+
+        // 1. Student Details
+        function showStudentDetails(id) {
+            const s = findData('students', id);
+            if(!s) return;
+            
+            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Class(5), Name(6), Gender(7), Father(8), Mother(9), Guardian(10), Address(11), Aadhaar(12), Photo(13), GPhoto(14)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Student ID</span><span class="detail-value">${s[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value">${s[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Class</span><span class="detail-value">${s[5]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${s[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${s[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${s[4]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Father's Name</span><span class="detail-value">${s[8]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mother's Name</span><span class="detail-value">${s[9]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Guardian</span><span class="detail-value">${s[10]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Secondary Mobile</span><span class="detail-value">${s[3] || '-'}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Address</span><span class="detail-value">${s[11]}</span></div>
+                </div>
+                <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+                    <h4 style="margin-bottom:10px;">Documents</h4>
+                    <div class="grid-3">
+                        <div>
+                            <span class="detail-label">Student Photo</span>
+                            ${s[13] ? `<a href="${s[13]}" target="_blank"><img src="${s[13]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                        </div>
+                        <div>
+                            <span class="detail-label">Guardian Photo</span>
+                            ${s[14] ? `<a href="${s[14]}" target="_blank"><img src="${s[14]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                        </div>
+                        <div>
+                            <span class="detail-label">Aadhaar Card</span>
+                            ${s[12] ? `<a href="${s[12]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View File</a>` : '<p>No File</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('Student Details', html);
+        }
+
+        // 2. Teacher Details
+        function showTeacherDetails(id) {
+            const t = findData('teachers', id);
+            if(!t) return;
+
+            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Teacher ID</span><span class="detail-value">${t[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value">${t[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Qualification</span><span class="detail-value">${t[5]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${t[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${t[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${t[4]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Father's Name</span><span class="detail-value">${t[8]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mother's Name</span><span class="detail-value">${t[9]}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Address</span><span class="detail-value">${t[10]}</span></div>
+                </div>
+                <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+                    <div class="grid-2">
+                        <div>
+                            <span class="detail-label">Teacher Photo</span>
+                            ${t[12] ? `<a href="${t[12]}" target="_blank"><img src="${t[12]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                        </div>
+                        <div>
+                            <span class="detail-label">Aadhaar Card</span>
+                            ${t[11] ? `<a href="${t[11]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View File</a>` : '<p>No File</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('Teacher Details', html);
+        }
+
+        // 3. Donation Details
+        function showDonationDetails(id) {
+            const d = findData('donations', id);
+            if(!d) return;
+
+            // Indices: ID(0), Date(1), Name(2), Mode(3), Amount(4), Mobile(5), Email(6), TxnID(7), Screenshot(8)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Donation ID</span><span class="detail-value">${d[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Donor Name</span><span class="detail-value">${d[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Amount</span><span class="detail-value">₹${d[4]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mode</span><span class="detail-value">${d[3]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Date</span><span class="detail-value">${new Date(d[1]).toLocaleString()}</span></div>
+                    <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${d[5]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${d[6] || '-'}</span></div>
+                    <div class="detail-item"><span class="detail-label">Transaction ID</span><span class="detail-value">${d[7] || '-'}</span></div>
+                </div>
+                <div style="margin-top:20px;">
+                    <span class="detail-label">Payment Receipt</span>
+                    ${d[8] ? `<a href="${d[8]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View Receipt</a>` : '<p>No Receipt</p>'}
+                </div>
+            `;
+            openModal('Donation Details', html);
+        }
+
+        // 4. Expense Details
+        function showExpenseDetails(id) {
+            const e = findData('expenses', id);
+            if(!e) return;
+
+            // Indices: ID(0), Timestamp(1), Item(2), Category(3), Desc(4), Photo(5), Amount(6), ExpDate(7), EntryBy(8)
+            const html = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Expense ID</span><span class="detail-value">${e[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Item Name</span><span class="detail-value">${e[2]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Category</span><span class="detail-value">${e[3]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Amount</span><span class="detail-value">₹${e[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Expense Date</span><span class="detail-value">${e[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Entry By</span><span class="detail-value">${e[8]}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Description</span><span class="detail-value">${e[4]}</span></div>
+                </div>
+                <div style="margin-top:20px;">
+                    <span class="detail-label">Item Photo/Proof</span>
+                    ${e[5] ? `<a href="${e[5]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View Image</a>` : '<p>No Image</p>'}
+                </div>
+            `;
+            openModal('Expense Details', html);
         }
 
     </script>
