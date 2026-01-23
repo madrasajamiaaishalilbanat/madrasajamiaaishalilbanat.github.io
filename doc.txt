@@ -179,8 +179,8 @@
             max-height: 600px; /* Limit height for scrolling full lists */
             overflow-y: auto;
         }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; } /* Increased min-width for new columns */
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
         th { background: var(--secondary); color: white; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
         tr:hover { background: #f8fafc; }
         
@@ -195,6 +195,11 @@
             border-radius: 6px;
         }
         .btn-view:hover { background-color: #0369a1; color: white; }
+
+        /* Status Badges */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .badge-active { background-color: #dcfce7; color: #166534; }
+        .badge-inactive { background-color: #fee2e2; color: #991b1b; }
 
         /* =========================================
            SUB-MENU NAVIGATION
@@ -293,7 +298,7 @@
         }
         .modal-content {
             background: white; padding: 30px; border-radius: var(--radius);
-            width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto;
+            width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto;
             position: relative; animation: popIn 0.3s ease-out;
         }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
@@ -301,7 +306,7 @@
         /* Modal Detail List Styling */
         .detail-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
@@ -418,7 +423,7 @@
             <section id="tab-registrations" class="home-section">
                 <div class="grid-2">
                     <div>
-                        <h2 class="section-title"><i class="fas fa-user-plus"></i> Student Registration</h2>
+                        <h2 class="section-title"><i class="fas fa-user-graduate"></i> Student Registration</h2>
                         <div class="card">
                             <form id="studentForm">
                                 <div class="grid-2">
@@ -448,7 +453,8 @@
                     </div>
 
                     <div>
-                        <h2 class="section-title"><i class="fas fa-chalkboard-teacher"></i> Teacher Registration</h2>
+                        <!-- UPDATED: STAFF REGISTRATION -->
+                        <h2 class="section-title"><i class="fas fa-users-cog"></i> Staff Registration</h2>
                         <div class="card">
                             <form id="teacherForm">
                                 <div class="grid-2">
@@ -457,7 +463,49 @@
                                 </div>
                                 <div class="form-group"><label>Email *</label><input type="email" name="email" required></div>
                                 <div class="form-group"><label>Qualification *</label><input type="text" name="qualification" required></div>
-                                <div class="form-group"><label>Teacher Name *</label><input type="text" name="fullName" required></div>
+                                <div class="form-group"><label>Full Name *</label><input type="text" name="fullName" required></div>
+                                
+                                <!-- NEW FIELDS START -->
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Joining Date *</label><input type="date" name="joiningDate" required></div>
+                                    <div class="form-group"><label>Department</label><input type="text" name="department" placeholder="e.g. Admin, Academic, Transport"></div>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Role / Position *</label>
+                                        <select name="role" required>
+                                            <option value="">Select Role</option>
+                                            <option>Founder</option>
+                                            <option>Co-Founder</option>
+                                            <option>Director</option>
+                                            <option>Managing Director</option>
+                                            <option>Chief Executive Officer (CEO)</option>
+                                            <option>Chief Operating Officer (COO)</option>
+                                            <option>Principal</option>
+                                            <option>Vice Principal</option>
+                                            <option>Head of Department (HOD)</option>
+                                            <option>Teacher</option>
+                                            <option>Assistant Teacher</option>
+                                            <option>Trainer / Instructor</option>
+                                            <option>Office Manager</option>
+                                            <option>Administrator</option>
+                                            <option>Receptionist</option>
+                                            <option>Supervisor</option>
+                                            <option>Security Guard</option>
+                                            <option>Cleaner / Housekeeping</option>
+                                            <option>Driver</option>
+                                            <option>Helper / Support Staff</option>
+                                            <option>Other Worker</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label>Employment Status *</label>
+                                        <select name="status" required>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- NEW FIELDS END -->
+
                                 <div class="form-group"><label>Gender *</label><select name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
                                 <div class="grid-2">
                                     <div class="form-group"><label>Father's Name *</label><input type="text" name="fatherName" required></div>
@@ -466,9 +514,9 @@
                                 <div class="form-group"><label>Address *</label><textarea name="fullAddress" rows="2" required></textarea></div>
                                 <div class="grid-2">
                                     <div class="form-group"><label>Aadhaar Card *</label><input type="file" name="aadhaarFile" accept="image/*,.pdf" required></div>
-                                    <div class="form-group"><label>Teacher Photo *</label><input type="file" name="teacherPhoto" accept="image/*" required></div>
+                                    <div class="form-group"><label>Staff Photo *</label><input type="file" name="teacherPhoto" accept="image/*" required></div>
                                 </div>
-                                <button type="submit" class="btn btn-accent">Register Teacher</button>
+                                <button type="submit" class="btn btn-accent">Register Staff</button>
                             </form>
                         </div>
                     </div>
@@ -567,7 +615,7 @@
             <div class="sub-nav-menu">
                 <div class="sub-nav-item active" onclick="switchDashTab('overview', this)"><i class="fas fa-chart-pie"></i> Overview</div>
                 <div class="sub-nav-item" onclick="switchDashTab('students', this)"><i class="fas fa-user-graduate"></i> All Students</div>
-                <div class="sub-nav-item" onclick="switchDashTab('teachers', this)"><i class="fas fa-chalkboard-teacher"></i> All Teachers</div>
+                <div class="sub-nav-item" onclick="switchDashTab('teachers', this)"><i class="fas fa-chalkboard-teacher"></i> All Staff</div>
                 <div class="sub-nav-item" onclick="switchDashTab('finance', this)"><i class="fas fa-wallet"></i> Finance Log</div>
             </div>
 
@@ -581,9 +629,9 @@
                         <p>Total Students</p>
                     </div>
                     <div class="stat-card teachers card">
-                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                        <i class="fas fa-users fa-2x"></i>
                         <h3 id="statTeachers">0</h3>
-                        <p>Total Teachers</p>
+                        <p>Total Staff</p>
                     </div>
                     <div class="stat-card donations card">
                         <i class="fas fa-donate fa-2x"></i>
@@ -635,18 +683,20 @@
                 </div>
             </section>
 
-            <!-- DASH TAB 3: ALL TEACHERS -->
+            <!-- DASH TAB 3: ALL STAFF -->
             <section id="dash-teachers" class="home-section">
-                <h2 class="section-title">All Teachers</h2>
+                <h2 class="section-title">All Staff Members</h2>
                 <div class="card table-scroll-container">
                     <table id="fullTableTeachers">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Qualification</th>
-                                <th>Gender</th>
+                                <th>Role</th>
+                                <th>Department</th>
+                                <th>Join Date</th>
                                 <th>Mobile</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -712,7 +762,7 @@
 
     <!-- Footer -->
     <footer style="background: var(--secondary); color: white; text-align: center; padding: 20px; margin-top: 40px;">
-        <p>&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved.</p>
+        <p>&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved. <br> Designed and Developed By <a href="https://www.techilyfly.com" target="_blank">Techily Fly by AbdurRahman Ibn Ghufran!</a> </p>
     </footer>
 
     <!-- =========================================
@@ -720,7 +770,7 @@
          ========================================= -->
     <script>
         // CONFIGURATION
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyRPzNEB5iz0NVfGMcLnfZckDb2mOZ6r80XP90dhOoJTBsRtoYQrZDfcxYJDugTYgp9ug/exec'; 
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybnHF61oC0iNkWKZcTLYUpvBzGnVI4k6STOF1DZixQ3NZgx0AsQGRynHIJKLrV4Zwuuw/exec'; 
         
         // Global Data Store
         let GLOBAL_DATA = {
@@ -933,17 +983,23 @@
                 </tr>`).join('');
             document.querySelector('#fullTableStudents tbody').innerHTML = studentRows || '<tr><td colspan="7">No data</td></tr>';
 
-            // 2. Teachers Table
-            const teacherRows = data.teachers.slice().reverse().map(t => `
+            // 2. Staff Table (Updated Indices & Columns)
+            // New Order: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12), JoiningDate(13), Department(14), Role(15), Status(16)
+            const teacherRows = data.teachers.slice().reverse().map(t => {
+                const statusClass = t[16] === 'Active' ? 'badge-active' : 'badge-inactive';
+                return `
                 <tr>
                     <td>${t[0]}</td>
                     <td>${t[6]}</td>
-                    <td>${t[5]}</td>
-                    <td>${t[7]}</td>
+                    <td>${t[15]}</td>
+                    <td>${t[14] || '-'}</td>
+                    <td>${t[13] || '-'}</td>
                     <td>${t[2]}</td>
+                    <td><span class="badge ${statusClass}">${t[16]}</span></td>
                     <td><button class="btn btn-view" onclick="showTeacherDetails('${t[0]}')">View</button></td>
-                </tr>`).join('');
-            document.querySelector('#fullTableTeachers tbody').innerHTML = teacherRows || '<tr><td colspan="6">No data</td></tr>';
+                </tr>`;
+            }).join('');
+            document.querySelector('#fullTableTeachers tbody').innerHTML = teacherRows || '<tr><td colspan="8">No data</td></tr>';
 
             // 3. Donations Table
             const donRows = data.donations.slice().reverse().map(d => `
@@ -1052,7 +1108,6 @@
             const s = findData('students', id);
             if(!s) return;
             
-            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Class(5), Name(6), Gender(7), Father(8), Mother(9), Guardian(10), Address(11), Aadhaar(12), Photo(13), GPhoto(14)
             const html = `
                 <div class="detail-grid">
                     <div class="detail-item"><span class="detail-label">Student ID</span><span class="detail-value">${s[0]}</span></div>
@@ -1088,16 +1143,20 @@
             openModal('Student Details', html);
         }
 
-        // 2. Teacher Details
+        // 2. Staff Details (Updated)
         function showTeacherDetails(id) {
             const t = findData('teachers', id);
             if(!t) return;
 
-            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12)
+            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12), JoiningDate(13), Department(14), Role(15), Status(16)
             const html = `
                 <div class="detail-grid">
-                    <div class="detail-item"><span class="detail-label">Teacher ID</span><span class="detail-value">${t[0]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Staff ID</span><span class="detail-value">${t[0]}</span></div>
                     <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value">${t[6]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Role</span><span class="detail-value">${t[15]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Department</span><span class="detail-value">${t[14] || '-'}</span></div>
+                    <div class="detail-item"><span class="detail-label">Joining Date</span><span class="detail-value">${t[13] || '-'}</span></div>
+                    <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${t[16]}</span></div>
                     <div class="detail-item"><span class="detail-label">Qualification</span><span class="detail-value">${t[5]}</span></div>
                     <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${t[7]}</span></div>
                     <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${t[2]}</span></div>
@@ -1109,7 +1168,7 @@
                 <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
                     <div class="grid-2">
                         <div>
-                            <span class="detail-label">Teacher Photo</span>
+                            <span class="detail-label">Staff Photo</span>
                             ${t[12] ? `<a href="${t[12]}" target="_blank"><img src="${t[12]}" class="detail-image"></a>` : '<p>No Image</p>'}
                         </div>
                         <div>
@@ -1119,7 +1178,7 @@
                     </div>
                 </div>
             `;
-            openModal('Teacher Details', html);
+            openModal('Staff Details', html);
         }
 
         // 3. Donation Details
@@ -1127,7 +1186,6 @@
             const d = findData('donations', id);
             if(!d) return;
 
-            // Indices: ID(0), Date(1), Name(2), Mode(3), Amount(4), Mobile(5), Email(6), TxnID(7), Screenshot(8)
             const html = `
                 <div class="detail-grid">
                     <div class="detail-item"><span class="detail-label">Donation ID</span><span class="detail-value">${d[0]}</span></div>
@@ -1152,7 +1210,6 @@
             const e = findData('expenses', id);
             if(!e) return;
 
-            // Indices: ID(0), Timestamp(1), Item(2), Category(3), Desc(4), Photo(5), Amount(6), ExpDate(7), EntryBy(8)
             const html = `
                 <div class="detail-grid">
                     <div class="detail-item"><span class="detail-label">Expense ID</span><span class="detail-value">${e[0]}</span></div>
@@ -1174,8 +1231,6 @@
     </script>
 </body>
 </html>
-
-
 
 /* =========================================
    BACKEND CODE (Code.gs)
@@ -1284,7 +1339,8 @@ function initSystem() {
       if (key === 'STUDENTS') {
         headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Class", "Name", "Gender", "Father", "Mother", "Guardian", "Address", "AadhaarURL", "PhotoURL", "GuardianPhotoURL"];
       } else if (key === 'TEACHERS') {
-        headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Qual", "Name", "Gender", "Father", "Mother", "Address", "AadhaarURL", "PhotoURL"];
+        // UPDATED HEADERS FOR STAFF
+        headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Qual", "Name", "Gender", "Father", "Mother", "Address", "AadhaarURL", "PhotoURL", "JoiningDate", "Department", "Role", "Status"];
       } else if (key === 'DONATIONS') {
         headers = ["ID", "Date", "Name", "Mode", "Amount", "Mobile", "Email", "TxnID", "ScreenshotURL"];
       } else if (key === 'EXPENSES') {
@@ -1358,19 +1414,22 @@ function registerStudent(data, folders) {
 
 function registerTeacher(data, folders) {
   const ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEETS.TEACHERS);
-  const id = "TCH-" + Utilities.getUuid().substring(0,6).toUpperCase();
+  const id = "STF-" + Utilities.getUuid().substring(0,6).toUpperCase();
   
   // Route to specific folders
   const aadhaar = data.aadhaarFile ? uploadFile(data.aadhaarFile, `Aadhaar_${id}.jpg`, folders.AADHAAR) : "";
   const photo = data.teacherPhoto ? uploadFile(data.teacherPhoto, `Photo_${id}.jpg`, folders.TEACHER_PHOTOS) : "";
 
+  // UPDATED APPEND ROW TO INCLUDE NEW FIELDS
+  // Order: ID, Date, Mobile, SecMobile, Email, Qual, Name, Gender, Father, Mother, Address, AadhaarURL, PhotoURL, JoiningDate, Department, Role, Status
   ss.appendRow([
     id, new Date(), data.mobile, data.secondaryMobile, data.email, 
     data.qualification, data.fullName, data.gender, data.fatherName, 
-    data.motherName, data.fullAddress, aadhaar, photo
+    data.motherName, data.fullAddress, aadhaar, photo,
+    data.joiningDate, data.department, data.role, data.status
   ]);
   
-  return { success: true, message: "Teacher Registered", teacherId: id };
+  return { success: true, message: "Staff Registered", teacherId: id };
 }
 
 function submitDonation(data, folders) {
