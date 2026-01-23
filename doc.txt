@@ -179,9 +179,9 @@
             max-height: 600px; /* Limit height for scrolling full lists */
             overflow-y: auto;
         }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; } /* Increased min-width for new columns */
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
-        th { background: var(--secondary); color: white; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; } 
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; white-space: nowrap; }
+        th { background: var(--secondary); color: white; position: sticky; top: 0; z-index: 10; }
         tr:hover { background: #f8fafc; }
         
         .action-link { color: var(--primary); cursor: pointer; font-weight: 600; }
@@ -193,6 +193,7 @@
             background-color: #e0f2fe;
             color: #0369a1;
             border-radius: 6px;
+            width: auto;
         }
         .btn-view:hover { background-color: #0369a1; color: white; }
 
@@ -365,6 +366,24 @@
             .section-title { font-size: 1.5rem; }
             .detail-grid { grid-template-columns: 1fr; }
         }
+
+        /* Footer Social Icons */
+        .social-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .social-icon {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.2s, color 0.2s;
+            text-decoration: none;
+        }
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: var(--primary-light);
+        }
     </style>
 </head>
 <body>
@@ -465,7 +484,20 @@
                                 <div class="form-group"><label>Qualification *</label><input type="text" name="qualification" required></div>
                                 <div class="form-group"><label>Full Name *</label><input type="text" name="fullName" required></div>
                                 
-                                <!-- NEW FIELDS START -->
+                                <!-- Personal Details -->
+                                <div class="form-group"><label>Gender *</label><select name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+                                <div class="grid-2">
+                                    <div class="form-group"><label>Father's Name *</label><input type="text" name="fatherName" required></div>
+                                    <div class="form-group"><label>Mother's Name *</label><input type="text" name="motherName" required></div>
+                                </div>
+                                <!-- NEW: Husband Name (Optional) -->
+                                <div class="form-group"><label>Husband's Name (Optional)</label><input type="text" name="husbandName"></div>
+                                
+                                <div class="form-group"><label>Address *</label><textarea name="fullAddress" rows="2" required></textarea></div>
+                                
+                                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                                
+                                <!-- Job Details -->
                                 <div class="grid-2">
                                     <div class="form-group"><label>Joining Date *</label><input type="date" name="joiningDate" required></div>
                                     <div class="form-group"><label>Department</label><input type="text" name="department" placeholder="e.g. Admin, Academic, Transport"></div>
@@ -497,21 +529,16 @@
                                             <option>Other Worker</option>
                                         </select>
                                     </div>
-                                    <div class="form-group"><label>Employment Status *</label>
-                                        <select name="status" required>
-                                            <option value="Active">Active</option>
-                                            <option value="Inactive">Inactive</option>
-                                        </select>
-                                    </div>
+                                    <!-- NEW: Salary -->
+                                    <div class="form-group"><label>Salary (₹) *</label><input type="number" name="salary" min="0" placeholder="0.00" required></div>
                                 </div>
-                                <!-- NEW FIELDS END -->
+                                <div class="form-group"><label>Employment Status *</label>
+                                    <select name="status" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
 
-                                <div class="form-group"><label>Gender *</label><select name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
-                                <div class="grid-2">
-                                    <div class="form-group"><label>Father's Name *</label><input type="text" name="fatherName" required></div>
-                                    <div class="form-group"><label>Mother's Name *</label><input type="text" name="motherName" required></div>
-                                </div>
-                                <div class="form-group"><label>Address *</label><textarea name="fullAddress" rows="2" required></textarea></div>
                                 <div class="grid-2">
                                     <div class="form-group"><label>Aadhaar Card *</label><input type="file" name="aadhaarFile" accept="image/*,.pdf" required></div>
                                     <div class="form-group"><label>Staff Photo *</label><input type="file" name="teacherPhoto" accept="image/*" required></div>
@@ -695,6 +722,7 @@
                                 <th>Role</th>
                                 <th>Department</th>
                                 <th>Join Date</th>
+                                <th>Salary</th>
                                 <th>Mobile</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -762,15 +790,25 @@
 
     <!-- Footer -->
     <footer style="background: var(--secondary); color: white; text-align: center; padding: 20px; margin-top: 40px;">
-        <p>&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved. <br> Designed and Developed By <a href="https://www.techilyfly.com" target="_blank">Techily Fly by AbdurRahman Ibn Ghufran!</a> </p>
+        <div class="social-container">
+            <!-- Top 7 Social Media Icons -->
+            <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="social-icon" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="social-icon" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+        </div>
+        <p style="margin-top: 15px;">&copy; 2026 Madrasa Jamia Aisha Lil Banat. All Rights Reserved. <br> Designed and Developed By <a href="https://www.techilyfly.com" target="_blank" style="color: var(--primary-light);">Techily Fly by AbdurRahman Ibn Ghufran!</a> </p>
     </footer>
 
     <!-- =========================================
          JAVASCRIPT LOGIC
          ========================================= -->
     <script>
-        // CONFIGURATION
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybnHF61oC0iNkWKZcTLYUpvBzGnVI4k6STOF1DZixQ3NZgx0AsQGRynHIJKLrV4Zwuuw/exec'; 
+        // CONFIGURATION - REPLACE WITH YOUR DEPLOYED WEB APP URL
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw03ZbIOF7huwMWlhiYNazKhI306V1SHspMaluycXOXLo1Fq4A75eo5KPDrz_pJtqpRJw/exec'; 
         
         // Global Data Store
         let GLOBAL_DATA = {
@@ -930,6 +968,15 @@
         // --- Dashboard Logic ---
         let chartInstances = {};
 
+        // Helper to format Date only (removes time)
+        function formatDateOnly(dateValue) {
+            if(!dateValue) return '-';
+            const d = new Date(dateValue);
+            // Check for invalid date
+            if(isNaN(d.getTime())) return dateValue;
+            return d.toLocaleDateString(); 
+        }
+
         async function loadDashboardData() {
             toggleLoader(true);
             try {
@@ -983,29 +1030,30 @@
                 </tr>`).join('');
             document.querySelector('#fullTableStudents tbody').innerHTML = studentRows || '<tr><td colspan="7">No data</td></tr>';
 
-            // 2. Staff Table (Updated Indices & Columns)
-            // New Order: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12), JoiningDate(13), Department(14), Role(15), Status(16)
+            // 2. Staff Table (Updated Indices)
+            // Order: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Husband(10), Address(11), Aadhaar(12), Photo(13), JoiningDate(14), Department(15), Role(16), Status(17), Salary(18)
             const teacherRows = data.teachers.slice().reverse().map(t => {
-                const statusClass = t[16] === 'Active' ? 'badge-active' : 'badge-inactive';
+                const statusClass = t[17] === 'Active' ? 'badge-active' : 'badge-inactive';
                 return `
                 <tr>
                     <td>${t[0]}</td>
                     <td>${t[6]}</td>
-                    <td>${t[15]}</td>
-                    <td>${t[14] || '-'}</td>
-                    <td>${t[13] || '-'}</td>
+                    <td>${t[16]}</td>
+                    <td>${t[15] || '-'}</td>
+                    <td>${formatDateOnly(t[14])}</td> <!-- Formatted Date -->
+                    <td>₹${t[18] || '0'}</td> <!-- Salary -->
                     <td>${t[2]}</td>
-                    <td><span class="badge ${statusClass}">${t[16]}</span></td>
+                    <td><span class="badge ${statusClass}">${t[17]}</span></td>
                     <td><button class="btn btn-view" onclick="showTeacherDetails('${t[0]}')">View</button></td>
                 </tr>`;
             }).join('');
-            document.querySelector('#fullTableTeachers tbody').innerHTML = teacherRows || '<tr><td colspan="8">No data</td></tr>';
+            document.querySelector('#fullTableTeachers tbody').innerHTML = teacherRows || '<tr><td colspan="9">No data</td></tr>';
 
             // 3. Donations Table
             const donRows = data.donations.slice().reverse().map(d => `
                 <tr>
                     <td>${d[0]}</td>
-                    <td>${new Date(d[1]).toLocaleDateString()}</td>
+                    <td>${formatDateOnly(d[1])}</td>
                     <td>${d[2]}</td>
                     <td>${d[3]}</td>
                     <td>₹${d[4]}</td>
@@ -1017,7 +1065,7 @@
             const expRows = data.expenses.slice().reverse().map(e => `
                 <tr>
                     <td>${e[0]}</td>
-                    <td>${new Date(e[1]).toLocaleDateString()}</td>
+                    <td>${formatDateOnly(e[1])}</td>
                     <td>${e[2]}</td>
                     <td>${e[3]}</td>
                     <td>₹${e[6]}</td>
@@ -1143,37 +1191,39 @@
             openModal('Student Details', html);
         }
 
-        // 2. Staff Details (Updated)
+        // 2. Staff Details (Updated with Salary, Husband Name, Date Format)
         function showTeacherDetails(id) {
             const t = findData('teachers', id);
             if(!t) return;
 
-            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Address(10), Aadhaar(11), Photo(12), JoiningDate(13), Department(14), Role(15), Status(16)
+            // Indices: ID(0), Date(1), Mobile(2), SecMobile(3), Email(4), Qual(5), Name(6), Gender(7), Father(8), Mother(9), Husband(10), Address(11), Aadhaar(12), Photo(13), JoiningDate(14), Department(15), Role(16), Status(17), Salary(18)
             const html = `
                 <div class="detail-grid">
                     <div class="detail-item"><span class="detail-label">Staff ID</span><span class="detail-value">${t[0]}</span></div>
                     <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value">${t[6]}</span></div>
-                    <div class="detail-item"><span class="detail-label">Role</span><span class="detail-value">${t[15]}</span></div>
-                    <div class="detail-item"><span class="detail-label">Department</span><span class="detail-value">${t[14] || '-'}</span></div>
-                    <div class="detail-item"><span class="detail-label">Joining Date</span><span class="detail-value">${t[13] || '-'}</span></div>
-                    <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${t[16]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Role</span><span class="detail-value">${t[16]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Department</span><span class="detail-value">${t[15] || '-'}</span></div>
+                    <div class="detail-item"><span class="detail-label">Joining Date</span><span class="detail-value">${formatDateOnly(t[14])}</span></div>
+                    <div class="detail-item"><span class="detail-label">Salary</span><span class="detail-value">₹${t[18] || '0'}</span></div>
+                    <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${t[17]}</span></div>
                     <div class="detail-item"><span class="detail-label">Qualification</span><span class="detail-value">${t[5]}</span></div>
                     <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${t[7]}</span></div>
                     <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${t[2]}</span></div>
                     <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${t[4]}</span></div>
                     <div class="detail-item"><span class="detail-label">Father's Name</span><span class="detail-value">${t[8]}</span></div>
                     <div class="detail-item"><span class="detail-label">Mother's Name</span><span class="detail-value">${t[9]}</span></div>
-                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Address</span><span class="detail-value">${t[10]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Husband's Name</span><span class="detail-value">${t[10] || '-'}</span></div>
+                    <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Address</span><span class="detail-value">${t[11]}</span></div>
                 </div>
                 <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
                     <div class="grid-2">
                         <div>
                             <span class="detail-label">Staff Photo</span>
-                            ${t[12] ? `<a href="${t[12]}" target="_blank"><img src="${t[12]}" class="detail-image"></a>` : '<p>No Image</p>'}
+                            ${t[13] ? `<a href="${t[13]}" target="_blank"><img src="${t[13]}" class="detail-image"></a>` : '<p>No Image</p>'}
                         </div>
                         <div>
                             <span class="detail-label">Aadhaar Card</span>
-                            ${t[11] ? `<a href="${t[11]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View File</a>` : '<p>No File</p>'}
+                            ${t[12] ? `<a href="${t[12]}" target="_blank" class="btn btn-outline" style="margin-top:5px;">View File</a>` : '<p>No File</p>'}
                         </div>
                     </div>
                 </div>
@@ -1192,7 +1242,7 @@
                     <div class="detail-item"><span class="detail-label">Donor Name</span><span class="detail-value">${d[2]}</span></div>
                     <div class="detail-item"><span class="detail-label">Amount</span><span class="detail-value">₹${d[4]}</span></div>
                     <div class="detail-item"><span class="detail-label">Mode</span><span class="detail-value">${d[3]}</span></div>
-                    <div class="detail-item"><span class="detail-label">Date</span><span class="detail-value">${new Date(d[1]).toLocaleString()}</span></div>
+                    <div class="detail-item"><span class="detail-label">Date</span><span class="detail-value">${formatDateOnly(d[1])}</span></div>
                     <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${d[5]}</span></div>
                     <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${d[6] || '-'}</span></div>
                     <div class="detail-item"><span class="detail-label">Transaction ID</span><span class="detail-value">${d[7] || '-'}</span></div>
@@ -1216,7 +1266,7 @@
                     <div class="detail-item"><span class="detail-label">Item Name</span><span class="detail-value">${e[2]}</span></div>
                     <div class="detail-item"><span class="detail-label">Category</span><span class="detail-value">${e[3]}</span></div>
                     <div class="detail-item"><span class="detail-label">Amount</span><span class="detail-value">₹${e[6]}</span></div>
-                    <div class="detail-item"><span class="detail-label">Expense Date</span><span class="detail-value">${e[7]}</span></div>
+                    <div class="detail-item"><span class="detail-label">Expense Date</span><span class="detail-value">${formatDateOnly(e[7])}</span></div>
                     <div class="detail-item"><span class="detail-label">Entry By</span><span class="detail-value">${e[8]}</span></div>
                     <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Description</span><span class="detail-value">${e[4]}</span></div>
                 </div>
@@ -1340,7 +1390,8 @@ function initSystem() {
         headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Class", "Name", "Gender", "Father", "Mother", "Guardian", "Address", "AadhaarURL", "PhotoURL", "GuardianPhotoURL"];
       } else if (key === 'TEACHERS') {
         // UPDATED HEADERS FOR STAFF
-        headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Qual", "Name", "Gender", "Father", "Mother", "Address", "AadhaarURL", "PhotoURL", "JoiningDate", "Department", "Role", "Status"];
+        // Added HusbandName and Salary. Ordering: Personal Info -> Job Info.
+        headers = ["ID", "Date", "Mobile", "SecMobile", "Email", "Qual", "Name", "Gender", "Father", "Mother", "HusbandName", "Address", "AadhaarURL", "PhotoURL", "JoiningDate", "Department", "Role", "Status", "Salary"];
       } else if (key === 'DONATIONS') {
         headers = ["ID", "Date", "Name", "Mode", "Amount", "Mobile", "Email", "TxnID", "ScreenshotURL"];
       } else if (key === 'EXPENSES') {
@@ -1420,13 +1471,13 @@ function registerTeacher(data, folders) {
   const aadhaar = data.aadhaarFile ? uploadFile(data.aadhaarFile, `Aadhaar_${id}.jpg`, folders.AADHAAR) : "";
   const photo = data.teacherPhoto ? uploadFile(data.teacherPhoto, `Photo_${id}.jpg`, folders.TEACHER_PHOTOS) : "";
 
-  // UPDATED APPEND ROW TO INCLUDE NEW FIELDS
-  // Order: ID, Date, Mobile, SecMobile, Email, Qual, Name, Gender, Father, Mother, Address, AadhaarURL, PhotoURL, JoiningDate, Department, Role, Status
+  // UPDATED APPEND ROW
+  // Order: ID, Date, Mobile, SecMobile, Email, Qual, Name, Gender, Father, Mother, HusbandName, Address, AadhaarURL, PhotoURL, JoiningDate, Department, Role, Status, Salary
   ss.appendRow([
     id, new Date(), data.mobile, data.secondaryMobile, data.email, 
     data.qualification, data.fullName, data.gender, data.fatherName, 
-    data.motherName, data.fullAddress, aadhaar, photo,
-    data.joiningDate, data.department, data.role, data.status
+    data.motherName, data.husbandName || "", data.fullAddress, aadhaar, photo,
+    data.joiningDate, data.department, data.role, data.status, data.salary
   ]);
   
   return { success: true, message: "Staff Registered", teacherId: id };
